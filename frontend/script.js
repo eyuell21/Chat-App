@@ -5,7 +5,8 @@ const messagesList = document.querySelector('#messages');
 // Fetch all messages from the server
 const loadMessages = async () => {
   try {
-    const res = await fetch('http://localhost:3000/messages');
+    const url = 'https://eyuel-quote-frontend.hosting.codeyourfuture.io'
+    const res = await fetch(url+'/messages');
     const messages = await res.json();
     messagesList.innerHTML = '';
     messages.forEach(addMessageToList);
@@ -17,7 +18,8 @@ const loadMessages = async () => {
 // Send a message to the server
 const sendMessage = async (message) => {
   try {
-    const res = await fetch('http://localhost:3000/messages', {
+    const url = 'https://eyuel-quote-frontend.hosting.codeyourfuture.io'
+    const res = await fetch(url+'/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
