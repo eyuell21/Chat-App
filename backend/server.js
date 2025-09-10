@@ -18,7 +18,10 @@ app.get('/messages', (req, res) => {
 app.post('/messages', (req, res) => {
   const { message } = req.body;
   if (message?.trim()) {
-    messages.push(message.trim());
+    messages.push({
+      text: message.trim(),
+      timestamp: new Date().toISOString()
+    });
     res.status(201).json({ success: true });
   } else {
     res.status(400).json({ error: 'Message is required' });
@@ -26,5 +29,5 @@ app.post('/messages', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(` Server running at http://localhost:${PORT}`);
+  console.log(` Server running at :${PORT}`);
 });
