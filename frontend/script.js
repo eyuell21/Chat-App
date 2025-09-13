@@ -2,33 +2,30 @@ const form = document.querySelector('#chat-form');
 const input = document.querySelector('#message-input');
 const messagesList = document.querySelector('#messages');
 
-// Fetch all messages from the server
+// Load all messages from backend and display with timestamps
 const loadMessages = async () => {
   try {
-    const url = 'https://eyuell21-quote-server440.hosting.codeyourfuture.io/messages'
-    const res = await fetch(url);
+    const res = await fetch('https://eyuell21-quote-server440.hosting.codeyourfuture.io/');
     const messages = await res.json();
     messagesList.innerHTML = '';
-    messages.forEach(addMessageToList);
+    messages.forEach(({ text, timestamp }) => addMessageToList(text, timestamp));
   } catch (err) {
     console.error('Failed to load messages:', err);
   }
 };
 
-// Send a message to the server
+// Send new message to backend
 const sendMessage = async (message) => {
   try {
-    const url = 'https://eyuell21-quote-server440.hosting.codeyourfuture.io/messages'
-    const res = await fetch(url, {
+    const res = await fetch('https://eyuell21-quote-server440.hosting.codeyourfuture.io/', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message }),
     });
 
     if (res.ok) {
-      addMessageToList(message);
+      const now = new Date().toISOString();
+      addMessageToList(message, now);
       input.value = '';
     } else {
       console.error('Message failed to send');
@@ -38,19 +35,21 @@ const sendMessage = async (message) => {
   }
 };
 
-// Add a message to the list
-const addMessageToList = (message) => {
+// Append message + timestamp to the list
+const addMessageToList = (message, timestamp) => {
   const li = document.createElement('li');
-  li.textContent = message;
+  // Format timestamp to something readable
+  const timeStr = new Date(timestamp).toLocaleString();
+  li.textContent = `${message} (since: ${timeStr})`;
   messagesList.appendChild(li);
 };
 
-// Form submit handler
+// Handle form submit
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   const message = input.value.trim();
   if (message) sendMessage(message);
 });
 
-// Load messages on page load
+// Load messages initially
 loadMessages();
