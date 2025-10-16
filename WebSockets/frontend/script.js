@@ -4,6 +4,7 @@ const messagesList = document.querySelector('#messages');
 
 let socket;
 
+let url = 'https://eyuell21chatappserverr.hosting.codeyourfuture.io/messages'
 
 const addMessageToList = (message, timestamp) => {
   const li = document.createElement('li');
@@ -15,7 +16,7 @@ const addMessageToList = (message, timestamp) => {
 // Load all messages from backend initially
 const loadMessages = async () => {
   try {
-    const res = await fetch('http://localhost:3000/messages');
+    const res = await fetch(url);
     const messages = await res.json();
     messagesList.innerHTML = '';
     messages.forEach(({ text, timestamp }) => addMessageToList(text, timestamp));
@@ -27,7 +28,7 @@ const loadMessages = async () => {
 // Send message via POST
 const sendMessage = async (message) => {
   try {
-    const res = await fetch('http://localhost:3000/messages', {
+    const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message }),
@@ -42,7 +43,7 @@ const sendMessage = async (message) => {
 
 // Setup WebSocket connection
 const setupWebSocket = () => {
-  socket = new WebSocket('ws://localhost:3000');
+  socket = new WebSocket(url);
 
   socket.addEventListener('open', () => {
     console.log('WebSocket connected');
