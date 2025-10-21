@@ -21,10 +21,12 @@ app.post('/messages', (req, res) => {
     const newMsg = {
       text: message.trim(),
       timestamp: new Date().toISOString(),
+      likes: 0,
+      dislikes: 0,
     };
     messages.push(newMsg);
 
-    // Broadcast new message to all WS clients
+    // Broadcast to all WebSocket clients
     wss.clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify(newMsg));
@@ -37,20 +39,57 @@ app.post('/messages', (req, res) => {
   }
 });
 
-// Create HTTP server and attach Express app
+// Like a message
+app.post('/like', (req, res) => {
+  const { timestamp } = req.body;
+  const message = messages.find(m => m.timestamp === timestamp);
+  if (message) {
+    message.likes += 1;
+
+    wss.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(message));
+      }
+    });
+
+    res.status(200).json(message);
+  } else {
+    res.status(404).json({ error: 'Message not found' });
+  }
+});
+
+// Dislike a message
+app.post('/dislike', (req, res) => {
+  const { timestamp } = req.body;
+  const message = messages.find(m => m.timestamp === timestamp);
+  if (message) {
+    message.dislikes += 1;
+
+    wss.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(message));
+      }
+    });
+
+    res.status(200).json(message);
+  } else {
+    res.status(404).json({ error: 'Message not found' });
+  }
+});
+
+// Create HTTP server
 const server = http.createServer(app);
 
-// Create WebSocket server on top of HTTP server
+// WebSocket server
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
-  console.log('Client connected via WebSocket');
+  console.log('WebSocket client connected');
 
   ws.on('close', () => {
     console.log('Client disconnected');
   });
 });
-
 
 server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
