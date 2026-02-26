@@ -43,7 +43,7 @@ Chat-App/
 - **Node.js** (v14 or higher)
 - **npm** (Node Package Manager)
 
-## ⚙️ Installation
+## Installation
 
 ### Long-Polling Setup
 
@@ -152,14 +152,14 @@ Messages are stored with the following structure:
 - **Resource Usage**: More efficient for continuous communication
 
 
-## 🚨 Limitations & Notes
+##  Limitations & Notes
 
 - **In-Memory Storage**: All messages are lost when the server restarts
 - **Single Server**: Designed to run on a single server (no horizontal scaling)
 - **No Authentication**: No user identification or access control
 - **Typo Alert**: WebSocket backend file is named `sever.js` (should be `server.js`)
 
-## 🔮 Future Enhancements
+##  Future Enhancements
 
 - Add persistent database (MongoDB, PostgreSQL)
 - Implement user authentication and identification
