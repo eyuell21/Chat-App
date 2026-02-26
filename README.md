@@ -67,7 +67,7 @@ The server will start at `http://localhost:3000`. Open the frontend at `WebSocke
 
 **Note:** Both implementations use port 3000. Ensure only one server is running at a time.
 
-## 🔧 Dependencies
+## Dependencies
 
 ### Common Dependencies (Both Implementations)
 - **express** (^5.1.0) - Web server framework
@@ -76,7 +76,7 @@ The server will start at `http://localhost:3000`. Open the frontend at `WebSocke
 ### WebSockets Only
 - **ws** (^8.18.3) - WebSocket implementation for Node.js
 
-## 📡API Endpoints
+## API Endpoints
 
 ### Long-Polling Implementation
 
